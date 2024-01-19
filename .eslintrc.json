@@ -1,0 +1,15 @@
+{
+    "env": {
+        "es2021": true,
+        "node": true
+    },
+    "ignorePatterns": [
+        "**/*.{js,jsx,txt,md}"
+    ],
+    "extends": "standard-with-typescript",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "rules": {}
+}
