@@ -4,13 +4,13 @@
 Dentro da pasta do projeto instale as dependências com o comando:
 
 ```bash
-$ npm install
+npm install
 ```
 
 Para inicializar o banco com o prisma utilize o comando:
 
 ```bash
-$ npx prisma migrate dev
+npx prisma migrate dev
 ```
 
 ## Funcionalidades:
