@@ -11,5 +11,14 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "rules": {}
+    "rules": {
+        "semi": [1, "always"],
+        "@typescript-eslint/semi": [1, "always"],
+        "@typescript-eslint/no-misused-promises": [
+            "error",
+            {
+              "checksVoidReturn": false
+            }
+          ]
+    }
 }
