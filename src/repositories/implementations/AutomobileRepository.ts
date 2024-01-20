@@ -9,6 +9,16 @@ class AutomobileRepository implements IAutomobileRepository {
       data
     });
   }
+
+  async findAllAutomobiles (): Promise<Automobile[]> {
+    return await this.prisma.automobile.findMany();
+  }
+
+  async findAutomobileById (id: number): Promise<Automobile | null> {
+    return await this.prisma.automobile.findUnique({
+      where: { id }
+    });
+  }
 }
 
 export default AutomobileRepository;

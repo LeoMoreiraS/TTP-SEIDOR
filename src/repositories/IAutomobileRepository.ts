@@ -5,6 +5,10 @@ export interface AutomobileRepository {
 
   createAutomobile: (data: Prisma.AutomobileCreateInput) => Promise<Automobile>
 
+  findAllAutomobiles: () => Promise<Automobile[]>
+
+  findAutomobileById: (id: number) => Promise<Automobile | null>
+
 }
 
 export default AutomobileRepository;
