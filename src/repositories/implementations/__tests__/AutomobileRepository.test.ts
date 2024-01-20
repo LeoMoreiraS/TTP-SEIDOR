@@ -65,4 +65,17 @@ describe('AutomobileRepository', () => {
       expect(automobile).toBeNull();
     });
   });
+
+  describe('updateAutomobile', () => {
+    it('should update the automobile if found', async () => {
+      const data = { plate: 'DEF-456', color: 'blue', brand: 'Toyota' };
+      const expectedAutomobile = { id: 1, ...data };
+      prismaMock.automobile.update.mockResolvedValue(expectedAutomobile);
+
+      const updatedAutomobile = await _automobileRepository.updateAutomobile(1, data);
+
+      expect(prismaMock.automobile.update).toHaveBeenCalledWith({ data: { brand: 'Toyota', color: 'blue', plate: 'DEF-456' }, where: { id: 1 } });
+      expect(updatedAutomobile).toEqual(expectedAutomobile);
+    });
+  });
 });

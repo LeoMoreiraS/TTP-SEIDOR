@@ -9,6 +9,7 @@ export interface AutomobileRepository {
 
   findAutomobileById: (id: number) => Promise<Automobile | null>
 
+  updateAutomobile: (id: number, data: Prisma.AutomobileUpdateInput) => Promise<Automobile>
 }
 
 export default AutomobileRepository;

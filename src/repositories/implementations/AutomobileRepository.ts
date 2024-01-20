@@ -19,6 +19,13 @@ class AutomobileRepository implements IAutomobileRepository {
       where: { id }
     });
   }
+
+  async updateAutomobile (id: number, data: Prisma.AutomobileUpdateInput): Promise<Automobile> {
+    return await this.prisma.automobile.update({
+      where: { id },
+      data
+    });
+  }
 }
 
 export default AutomobileRepository;
