@@ -12,6 +12,11 @@ describe('AutomobileRepository', () => {
     jest.clearAllMocks();
   });
 
+  it('should import the dependencies correctly', () => {
+    expect(prismaMock).not.toBeUndefined();
+    expect(AutomobileRepository).not.toBeUndefined();
+  });
+
   describe('createAutomobile', () => {
     it('should create an automobile', async () => {
       const data = { plate: 'LVZ-6342', color: 'vermelho', brand: 'Fiat' };
@@ -25,6 +30,7 @@ describe('AutomobileRepository', () => {
       expect(automobile).toEqual(expectedAutomobile);
     });
   });
+
   describe('findAllAutomobiles', () => {
     it('should return an empty array if there are no automobiles', async () => {
       prismaMock.automobile.findMany.mockResolvedValue([]);
@@ -76,6 +82,22 @@ describe('AutomobileRepository', () => {
 
       expect(prismaMock.automobile.update).toHaveBeenCalledWith({ data: { brand: 'Toyota', color: 'blue', plate: 'DEF-456' }, where: { id: 1 } });
       expect(updatedAutomobile).toEqual(expectedAutomobile);
+    });
+  });
+
+  describe('deleteAutomobile', () => {
+    it('should delete the automobile if found', async () => {
+      const automobile = { id: 1, plate: 'ABC123', color: 'red', brand: 'Honda' };
+      prismaMock.automobile.delete.mockResolvedValue(automobile);
+
+      const deletedAutomobile = await _automobileRepository.deleteAutomobile(1);
+
+      expect(prismaMock.automobile.delete).toHaveBeenCalledWith({
+        where: {
+          id: 1
+        }
+      });
+      expect(deletedAutomobile).toEqual(automobile);
     });
   });
 });

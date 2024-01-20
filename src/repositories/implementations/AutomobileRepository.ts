@@ -26,6 +26,12 @@ class AutomobileRepository implements IAutomobileRepository {
       data
     });
   }
+
+  async deleteAutomobile (id: number): Promise<Automobile> {
+    return await this.prisma.automobile.delete({
+      where: { id }
+    });
+  }
 }
 
 export default AutomobileRepository;
