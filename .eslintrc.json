@@ -12,6 +12,7 @@
         "sourceType": "module"
     },
     "rules": {
+        "@typescript-eslint/unbound-method": "off",
         "semi": [1, "always"],
         "@typescript-eslint/semi": [1, "always"],
         "@typescript-eslint/no-misused-promises": [
@@ -20,5 +21,6 @@
               "checksVoidReturn": false
             }
           ]
+          
     }
 }

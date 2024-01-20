@@ -1,11 +1,9 @@
 import express, { type Request, type Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import prisma from './prisma/prismaClient';
 
 const app = express();
 
 app.use(express.json());
-
-const prisma = new PrismaClient();
 
 app.get('/', async (req: Request, res: Response): Promise<void> => {
   const driver = await prisma.driver.create({
