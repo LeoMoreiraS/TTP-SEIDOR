@@ -7,92 +7,92 @@ import { idValidator } from '../utils/idValidator';
 export class DriverController {
   constructor (private readonly DriverRepository: IDriverRepository) {}
 
-  async getDrivers (req: Request, res: Response): Promise<void> {
+  async getDrivers (req: Request, res: Response): Promise<Response> {
     try {
       const Drivers = await this.DriverRepository.findAllDrivers();
-      res.json(Drivers);
+      return res.json(Drivers);
     } catch (error) {
-      errorHandler(error);
+      return errorHandler(error, res);
     }
   }
 
-  async getDriverById (req: Request, res: Response): Promise<void> {
+  async getDriverById (req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
 
     if (id === undefined) {
-      errorHandler(new Error('Missing required parameter: id'));
+      return errorHandler(new Error('Missing required parameter: id'), res);
     }
     if (idValidator(id)) {
-      errorHandler(new Error('Invalid id'));
+      return errorHandler(new Error('Invalid id'), res);
     }
 
     try {
       const Driver = await this.DriverRepository.findDriverById(Number(id));
       if (Driver !== null) {
-        res.json(Driver);
+        return res.json(Driver);
       } else {
-        res.status(404).json({ error: 'Driver not found' });
+        return errorHandler('Driver not found', res, 404);
       }
     } catch (error) {
-      errorHandler(error);
+      return errorHandler(error, res);
     }
   }
 
-  async createDriver (req: Request, res: Response): Promise<void> {
+  async createDriver (req: Request, res: Response): Promise<Response> {
     const DriverData: Prisma.DriverCreateInput = req.body;
 
     if (DriverData?.name === undefined) {
-      errorHandler(new Error('Missing required fields in request body'));
+      return errorHandler(new Error('Missing required fields in request body'), res);
     }
 
     try {
       const Driver = await this.DriverRepository.createDriver(DriverData);
 
-      res.status(201).json(Driver);
+      return res.status(201).json(Driver);
     } catch (error) {
-      errorHandler(error);
+      return errorHandler(error, res);
     }
   }
 
-  async updateDriver (req: Request, res: Response): Promise<void> {
+  async updateDriver (req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.params;
       if (idValidator(id)) {
-        errorHandler(new Error('Invalid id'));
+        return errorHandler(new Error('Invalid id'), res);
       }
 
       const DriverData: Prisma.DriverUpdateInput = req.body;
       if (DriverData?.name === undefined) {
-        errorHandler(new Error('Missing required fields in request body'));
+        return errorHandler(new Error('Missing required fields in request body'), res);
       }
 
       const updatedDriver = await this.DriverRepository.updateDriver(Number(id), DriverData);
 
       if (updatedDriver !== null) {
-        res.json(updatedDriver);
+        return res.json(updatedDriver);
       } else {
-        res.status(404).json({ error: 'Driver not found' });
+        return errorHandler('Driver not found', res, 404);
       }
     } catch (error) {
-      errorHandler(error);
+      return errorHandler(error, res);
     }
   }
 
-  async deleteDriver (req: Request, res: Response): Promise<void> {
+  async deleteDriver (req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.params;
       if (idValidator(id)) {
-        errorHandler(new Error('Invalid id'));
+        return errorHandler(new Error('Invalid id'), res);
       }
 
       const deletedDriver = await this.DriverRepository.deleteDriver(Number(id));
       if (deletedDriver !== null) {
-        res.json(deletedDriver);
+        return res.json(deletedDriver);
       } else {
-        res.status(404).json({ error: 'Driver not found' });
+        return errorHandler('Driver not found', res, 404);
       }
     } catch (error) {
-      errorHandler(error);
+      return errorHandler(error, res);
     }
   }
 }
