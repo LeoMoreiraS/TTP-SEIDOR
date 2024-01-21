@@ -13,6 +13,7 @@
     },
     "rules": {
         "@typescript-eslint/unbound-method": "off",
+        "@typescript-eslint/consistent-type-assertions": "off",
         "semi": [1, "always"],
         "@typescript-eslint/semi": [1, "always"],
         "@typescript-eslint/no-misused-promises": [

@@ -1,7 +1,7 @@
 import { type Prisma, type PrismaClient, type Automobile } from '@prisma/client';
-import type IAutomobileRepository from '../IAutomobileRepository';
+import { type IAutomobileRepository } from '../IAutomobileRepository';
 
-class AutomobileRepository implements IAutomobileRepository {
+export class AutomobileRepository implements IAutomobileRepository {
   constructor (readonly prisma: PrismaClient) {};
 
   async createAutomobile (data: Prisma.AutomobileCreateInput): Promise<Automobile> {
@@ -20,18 +20,16 @@ class AutomobileRepository implements IAutomobileRepository {
     });
   }
 
-  async updateAutomobile (id: number, data: Prisma.AutomobileUpdateInput): Promise<Automobile> {
+  async updateAutomobile (id: number, data: Prisma.AutomobileUpdateInput): Promise<Automobile | null> {
     return await this.prisma.automobile.update({
       where: { id },
       data
     });
   }
 
-  async deleteAutomobile (id: number): Promise<Automobile> {
+  async deleteAutomobile (id: number): Promise<Automobile | null> {
     return await this.prisma.automobile.delete({
       where: { id }
     });
   }
 }
-
-export default AutomobileRepository;

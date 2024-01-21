@@ -1,6 +1,6 @@
 import { type Automobile, type Prisma, type PrismaClient } from '@prisma/client';
 
-export interface AutomobileRepository {
+export interface IAutomobileRepository {
   readonly prisma: PrismaClient
 
   createAutomobile: (data: Prisma.AutomobileCreateInput) => Promise<Automobile>
@@ -9,9 +9,7 @@ export interface AutomobileRepository {
 
   findAutomobileById: (id: number) => Promise<Automobile | null>
 
-  updateAutomobile: (id: number, data: Prisma.AutomobileUpdateInput) => Promise<Automobile>
+  updateAutomobile: (id: number, data: Prisma.AutomobileUpdateInput) => Promise<Automobile | null>
 
-  deleteAutomobile: (id: number) => Promise<Automobile>
+  deleteAutomobile: (id: number) => Promise<Automobile | null>
 }
-
-export default AutomobileRepository;

@@ -15,11 +15,11 @@ npx prisma migrate dev
 
 ## Funcionalidades:
 ### Cadastro de automóvel:
-- [ ] Cadastrar um novo automóvel
-- [ ] Atualizar um automóvel cadastrado
-- [ ] Excluir um automóvel cadastrado
-- [ ] Recuperar um automóvel cadastrado pelo seu identificador único
-- [ ] Listar os automóveis cadastrados. Deve ser possível filtrar a listagem dos automóveis por cor e marca.
+- [x] Cadastrar um novo automóvel
+- [x] Atualizar um automóvel cadastrado
+- [x] Excluir um automóvel cadastrado
+- [x] Recuperar um automóvel cadastrado pelo seu identificador único
+- [x] Listar os automóveis cadastrados. Deve ser possível filtrar a listagem dos automóveis por cor e marca.
 
 ### Cadastro de motoristas
 - [ ] Cadastrar um novo motorista
@@ -35,17 +35,17 @@ npx prisma migrate dev
 
 ## O que devemos controlar de cada recurso:
 ### Automóvel
-- [ ] Placa
-- [ ] Cor
-- [ ] Marca
+- [x] Placa
+- [x] Cor
+- [x] Marca
 ### Motorista
-- [ ] Nome
+- [x] Nome
 ### Utilização do automóvel
-- [ ] Data de início da utilização
-- [ ] Data de término da utilização
-- [ ] Motorista que utilizou
-- [ ] Automóvel utilizado
-- [ ] Motivo de utilização
+- [x] Data de início da utilização
+- [x] Data de término da utilização
+- [x] Motorista que utilizou
+- [x] Automóvel utilizado
+- [x] Motivo de utilização
 
 ## Regras de negócio: 
 - [ ] Um automóvel só pode ser utilizado por um motorista por vez. 
