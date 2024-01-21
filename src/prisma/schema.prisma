@@ -29,8 +29,8 @@ model AutomobileUsage {
   startDate    DateTime   @default(now())
   endDate      DateTime?
   purpose      String
-  driverId     Int
-  automobileId Int
-  driver       Driver     @relation(fields: [driverId], references: [id])
-  automobile   Automobile @relation(fields: [automobileId], references: [id])
+  driverId     Int? 
+  automobileId Int?  
+  driver       Driver?    @relation(fields: [driverId], references: [id], onDelete: SetNull) 
+  automobile   Automobile?  @relation(fields: [automobileId], references: [id], onDelete: SetNull) 
 }
