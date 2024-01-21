@@ -2,7 +2,6 @@ import { mockAutomobile, mockAutomobileInput, mockAutomobiles } from '../../__mo
 import { mockReq, mockRes } from '../../__mocks__/express.mocks';
 import type { IAutomobileRepository } from '../../repositories/IAutomobileRepository';
 import { AutomobileController } from '../AutomobileController';
-import { type Request, type Response } from 'express';
 import { mockDeep } from 'jest-mock-extended';
 
 describe('AutomobileController', () => {
@@ -12,6 +11,12 @@ describe('AutomobileController', () => {
   beforeEach(() => {
     _automobileController = new AutomobileController(_automobileRepository);
   });
+
+  it('should import the dependencies correctly', () => {
+    expect(_automobileRepository).not.toBeUndefined();
+    expect(AutomobileController).not.toBeUndefined();
+  });
+
   describe('findAllAutomobiles', () => {
     test('should find all automobiles', async () => {
       _automobileRepository.findAllAutomobiles.mockResolvedValueOnce(mockAutomobiles);
@@ -21,13 +26,29 @@ describe('AutomobileController', () => {
       expect(mockRes.json).toHaveBeenCalledWith(mockAutomobiles);
     });
 
+    test('should find all automobiles from renault', async () => {
+      _automobileRepository.findAllAutomobiles.mockResolvedValueOnce([mockAutomobiles[1]]);
+      mockReq.params = { brand: 'Renault' };
+      await _automobileController.getAutomobiles(mockReq, mockRes);
+
+      expect(mockRes.json).toHaveBeenCalledWith([mockAutomobiles[1]]);
+    });
+
+    test('should find all red automobiles', async () => {
+      _automobileRepository.findAllAutomobiles.mockResolvedValueOnce([mockAutomobile]);
+      mockReq.params = { color: 'vermelho' };
+      await _automobileController.getAutomobiles(mockReq, mockRes);
+
+      expect(mockRes.json).toHaveBeenCalledWith([mockAutomobile]);
+    });
+
     test('should handle errors from repository', async () => {
       const mockError = new Error('Error fetching automobiles');
       _automobileRepository.findAllAutomobiles.mockRejectedValueOnce(mockError);
 
       await _automobileController.getAutomobiles(mockReq, mockRes);
 
-      mockRes.json({ error: { message: 'Error fetching automobiles' } });
+      mockRes.json({ error: { message: 'Something unexpected happened' } });
     });
   });
 
@@ -42,7 +63,7 @@ describe('AutomobileController', () => {
       expect(mockRes.json).toHaveBeenCalledWith(mockAutomobile);
     });
 
-    test('should throw a error if id is invalid', async () => {
+    test('should return a error if id is invalid', async () => {
       mockReq.params = { id: 'invalid id' };
 
       await _automobileController.getAutomobileById(mockReq, mockRes);
@@ -50,7 +71,7 @@ describe('AutomobileController', () => {
       mockRes.json({ error: { message: 'Invalid id' } });
     });
 
-    test('should throw a error if id is undefined', async () => {
+    test('should return a error if id is undefined', async () => {
       mockReq.params = { id: undefined as unknown as string };
       await _automobileController.getAutomobileById(mockReq, mockRes);
       mockRes.json({ error: { message: 'Missing required parameter: id' } });
@@ -73,7 +94,7 @@ describe('AutomobileController', () => {
       mockReq.params = { id: '1' };
 
       await _automobileController.getAutomobileById(mockReq, mockRes);
-      mockRes.json({ error: { message: 'Error finding automobile' } });
+      mockRes.json({ error: { message: 'Something unexpected happened' } });
     });
   });
 
@@ -103,7 +124,7 @@ describe('AutomobileController', () => {
       mockReq.body = mockAutomobileInput;
 
       await _automobileController.createAutomobile(mockReq, mockRes);
-      mockRes.json({ error: { message: 'Error creating automobile' } });
+      mockRes.json({ error: { message: 'Something unexpected happened' } });
     });
   });
 
@@ -135,14 +156,14 @@ describe('AutomobileController', () => {
       expect(mockRes.json).toHaveBeenCalledWith({ error: { message: 'Automobile not found' } });
     });
 
-    test('should throw a error if id is invalid', async () => {
+    test('should return a error if id is invalid', async () => {
       mockReq.params = { id: 'invalid id' };
 
       await _automobileController.updateAutomobile(mockReq, mockRes);
       mockRes.json({ error: { message: 'Invalid id' } });
     });
 
-    test('should throw a error when missing all fields', async () => {
+    test('should return a error when missing all fields', async () => {
       mockReq.params = { id: '1' };
       mockReq.body = {};
 
@@ -198,7 +219,7 @@ describe('AutomobileController', () => {
       mockReq.params = { id: '1' };
 
       await _automobileController.deleteAutomobile(mockReq, mockRes);
-      mockRes.json({ error: { message: 'Error deleting automobile' } });
+      mockRes.json({ error: { message: 'Something unexpected happened' } });
     });
   });
 });

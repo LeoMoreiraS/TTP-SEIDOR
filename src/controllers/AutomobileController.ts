@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express';
-import type { IAutomobileRepository } from '../repositories/IAutomobileRepository';
+import type { IAutomobileRepository, IFilterAutomobilesDTO } from '../repositories/IAutomobileRepository';
 import { errorHandler } from '../utils/errorHandler';
 import { type Prisma } from '@prisma/client';
 import { idValidator } from '../utils/idValidator';
@@ -9,7 +9,8 @@ export class AutomobileController {
 
   async getAutomobiles (req: Request, res: Response): Promise<Response> {
     try {
-      const automobiles = await this.automobileRepository.findAllAutomobiles();
+      const optionalParams: IFilterAutomobilesDTO = req.query;
+      const automobiles = await this.automobileRepository.findAllAutomobiles(optionalParams);
       return res.json(automobiles);
     } catch (error) {
       return errorHandler(error, res);
@@ -20,10 +21,10 @@ export class AutomobileController {
     const { id } = req.params;
 
     if (id === undefined) {
-      return errorHandler(new Error('Missing required parameter: id'), res);
+      return errorHandler('Missing required parameter: id', res);
     }
     if (idValidator(id)) {
-      return errorHandler(new Error('Invalid id'), res);
+      return errorHandler('Invalid id', res);
     }
 
     try {
@@ -42,7 +43,7 @@ export class AutomobileController {
     const automobileData: Prisma.AutomobileCreateInput = req.body;
 
     if (automobileData?.color === undefined || automobileData?.brand === undefined || automobileData?.plate === undefined) {
-      return errorHandler(new Error('Missing required fields in request body'), res);
+      return errorHandler('Missing required fields in request body', res);
     }
 
     try {
@@ -58,12 +59,12 @@ export class AutomobileController {
     try {
       const { id } = req.params;
       if (idValidator(id)) {
-        return errorHandler(new Error('Invalid id'), res);
+        return errorHandler('Invalid id', res);
       }
 
       const automobileData: Prisma.AutomobileUpdateInput = req.body;
       if (automobileData?.color === undefined && automobileData?.brand === undefined && automobileData?.plate === undefined) {
-        return errorHandler(new Error('Missing required fields in request body'), res);
+        return errorHandler('Missing required fields in request body', res);
       }
 
       const updatedAutomobile = await this.automobileRepository.updateAutomobile(Number(id), automobileData);
@@ -82,7 +83,7 @@ export class AutomobileController {
     try {
       const { id } = req.params;
       if (idValidator(id)) {
-        return errorHandler(new Error('Invalid id'), res);
+        return errorHandler('Invalid id', res);
       }
 
       const deletedAutomobile = await this.automobileRepository.deleteAutomobile(Number(id));

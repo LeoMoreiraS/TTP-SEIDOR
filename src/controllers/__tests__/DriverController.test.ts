@@ -1,8 +1,7 @@
 import { mockDriver, mockDriverInput, mockDrivers } from '../../__mocks__/drivers.mocks';
 import { mockReq, mockRes } from '../../__mocks__/express.mocks';
-import type { IDriverRepository } from '../../repositories/IDriverRepository';
+import { type IDriverRepository } from '../../repositories/IDriverRepository';
 import { DriverController } from '../DriverController';
-import { type Request, type Response } from 'express';
 import { mockDeep } from 'jest-mock-extended';
 
 describe('DriverController', () => {
@@ -12,13 +11,27 @@ describe('DriverController', () => {
   beforeEach(() => {
     _DriverController = new DriverController(_DriverRepository);
   });
+
+  it('should import the dependencies correctly', () => {
+    expect(DriverController).not.toBeUndefined();
+    expect(_DriverRepository).not.toBeUndefined();
+  });
+
   describe('findAllDrivers', () => {
     test('should find all Drivers', async () => {
       _DriverRepository.findAllDrivers.mockResolvedValueOnce(mockDrivers);
-
+      mockReq.query = {};
       await _DriverController.getDrivers(mockReq, mockRes);
 
       expect(mockRes.json).toHaveBeenCalledWith(mockDrivers);
+    });
+
+    test('should find all Drivers filtered by name', async () => {
+      _DriverRepository.findAllDrivers.mockResolvedValueOnce([mockDrivers[1]]);
+      mockReq.query = { name: 'Moreira' };
+      await _DriverController.getDrivers(mockReq, mockRes);
+
+      expect(mockRes.json).toHaveBeenCalledWith([mockDrivers[1]]);
     });
 
     test('should handle errors from repository', async () => {
@@ -27,7 +40,7 @@ describe('DriverController', () => {
 
       await _DriverController.getDrivers(mockReq, mockRes);
 
-      expect(mockRes.json).toHaveBeenCalledWith({ error: { message: 'Error fetching Drivers' } });
+      expect(mockRes.json).toHaveBeenCalledWith({ error: { message: 'Something unexpected happened' } });
     });
   });
 
@@ -42,7 +55,7 @@ describe('DriverController', () => {
       expect(mockRes.json).toHaveBeenCalledWith(mockDriver);
     });
 
-    test('should throw a error if id is invalid', async () => {
+    test('should return a error if id is invalid', async () => {
       mockReq.params = { id: 'invalid id' };
 
       await _DriverController.getDriverById(mockReq, mockRes);
@@ -50,7 +63,7 @@ describe('DriverController', () => {
       expect(mockRes.json).toHaveBeenCalledWith({ error: { message: 'Invalid id' } });
     });
 
-    test('should throw a error if id is invalid', async () => {
+    test('should return a error if id is invalid', async () => {
       mockReq.params = { id: undefined as unknown as string };
       await _DriverController.getDriverById(mockReq, mockRes);
 
@@ -75,7 +88,7 @@ describe('DriverController', () => {
 
       await _DriverController.getDriverById(mockReq, mockRes);
 
-      expect(mockRes.json).toHaveBeenCalledWith({ error: { message: 'Error finding Driver' } });
+      expect(mockRes.json).toHaveBeenCalledWith({ error: { message: 'Something unexpected happened' } });
     });
   });
 
@@ -91,7 +104,7 @@ describe('DriverController', () => {
       });
     });
 
-    test('should throw a error when missing a field', async () => {
+    test('should return a error when missing a field', async () => {
       mockReq.body = {};
 
       await _DriverController.createDriver(mockReq, mockRes);
@@ -107,7 +120,7 @@ describe('DriverController', () => {
 
       await _DriverController.createDriver(mockReq, mockRes);
 
-      expect(mockRes.json).toHaveBeenCalledWith({ error: { message: 'Error creating Driver' } });
+      expect(mockRes.json).toHaveBeenCalledWith({ error: { message: 'Something unexpected happened' } });
     });
   });
 
@@ -139,7 +152,7 @@ describe('DriverController', () => {
       expect(mockRes.json).toHaveBeenCalledWith({ error: { message: 'Driver not found' } });
     });
 
-    test('should throw a error if id is invalid', async () => {
+    test('should return a error if id is invalid', async () => {
       mockReq.params = { id: 'invalid id' };
 
       await _DriverController.updateDriver(mockReq, mockRes);
@@ -147,7 +160,7 @@ describe('DriverController', () => {
       expect(mockRes.json).toHaveBeenCalledWith({ error: { message: 'Invalid id' } });
     });
 
-    test('should throw a error when missing all fields', async () => {
+    test('should return a error when missing all fields', async () => {
       mockReq.params = { id: '1' };
       mockReq.body = {};
 
@@ -165,7 +178,7 @@ describe('DriverController', () => {
 
       await _DriverController.updateDriver(mockReq, mockRes);
 
-      expect(mockRes.json).toHaveBeenCalledWith({ error: { message: 'Error updating Driver' } });
+      expect(mockRes.json).toHaveBeenCalledWith({ error: { message: 'Something unexpected happened' } });
     });
   });
 
@@ -180,7 +193,7 @@ describe('DriverController', () => {
       expect(mockRes.json).toHaveBeenCalledWith(mockDriver);
     });
 
-    test('should throw a error if id is invalid', async () => {
+    test('should return a error if id is invalid', async () => {
       mockReq.params = { id: 'invalid id' };
 
       await _DriverController.deleteDriver(mockReq, mockRes);
@@ -207,7 +220,7 @@ describe('DriverController', () => {
 
       await _DriverController.deleteDriver(mockReq, mockRes);
 
-      expect(mockRes.json).toHaveBeenCalledWith({ error: { message: 'Error deleting Driver' } });
+      expect(mockRes.json).toHaveBeenCalledWith({ error: { message: 'Something unexpected happened' } });
     });
   });
 });

@@ -5,7 +5,7 @@ export interface IDriverRepository {
 
   createDriver: (data: Prisma.DriverCreateInput) => Promise<Driver>
 
-  findAllDrivers: () => Promise<Driver[]>
+  findAllDrivers: (name?: string) => Promise<Driver[]>
 
   findDriverById: (id: number) => Promise<Driver | null>
 

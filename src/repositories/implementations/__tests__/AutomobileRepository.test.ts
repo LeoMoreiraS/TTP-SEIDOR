@@ -34,17 +34,35 @@ describe('AutomobileRepository', () => {
     it('should return an empty array if there are no automobiles', async () => {
       prismaMock.automobile.findMany.mockResolvedValue([]);
 
-      const automobiles = await _automobileRepository.findAllAutomobiles();
-
+      const automobiles = await _automobileRepository.findAllAutomobiles({});
+      expect(prismaMock.automobile.findMany).toHaveBeenCalledWith({ where: {} });
       expect(automobiles).toEqual([]);
     });
 
     it('should return all automobiles', async () => {
       prismaMock.automobile.findMany.mockResolvedValue(mockAutomobiles);
 
-      const foundAutomobiles = await _automobileRepository.findAllAutomobiles();
+      const foundAutomobiles = await _automobileRepository.findAllAutomobiles({});
 
       expect(foundAutomobiles).toEqual(mockAutomobiles);
+    });
+
+    it('should return all automobiles filtered by brand', async () => {
+      prismaMock.automobile.findMany.mockResolvedValue([mockAutomobiles[1]]);
+
+      const foundAutomobiles = await _automobileRepository.findAllAutomobiles({ brand: 'Renault' });
+      expect(prismaMock.automobile.findMany).toHaveBeenCalledWith({ where: { brand: { equals: 'Renault' } } });
+      expect(foundAutomobiles).toEqual([mockAutomobiles[1]]);
+    });
+
+    it('should return all automobiles filtered by color', async () => {
+      prismaMock.automobile.findMany.mockResolvedValue([mockAutomobile]);
+
+      const foundAutomobiles = await _automobileRepository.findAllAutomobiles({ color: 'vermelho' });
+
+      expect(prismaMock.automobile.findMany).toHaveBeenCalledWith({ where: { color: { equals: 'vermelho' } } });
+
+      expect(foundAutomobiles).toEqual([mockAutomobile]);
     });
   });
 
@@ -73,6 +91,7 @@ describe('AutomobileRepository', () => {
       const updatedAutomobile = await _automobileRepository.updateAutomobile(1, mockAutomobileInput);
 
       expect(prismaMock.automobile.update).toHaveBeenCalledWith({ data: mockAutomobileInput, where: { id: 1 } });
+
       expect(updatedAutomobile).toEqual(mockAutomobile);
     });
   });

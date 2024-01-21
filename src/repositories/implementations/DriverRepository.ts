@@ -10,8 +10,11 @@ export class DriverRepository implements IDriverRepository {
     });
   }
 
-  async findAllDrivers (): Promise<Driver[]> {
-    return await this.prisma.driver.findMany();
+  async findAllDrivers (name?: string): Promise<Driver[]> {
+    const filterOptions = name !== undefined ? { name: { contains: name } } : {};
+    return await this.prisma.driver.findMany({
+      where: filterOptions
+    });
   }
 
   async findDriverById (id: number): Promise<Driver | null> {

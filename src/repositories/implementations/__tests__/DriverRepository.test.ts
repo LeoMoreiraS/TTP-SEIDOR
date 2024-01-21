@@ -34,7 +34,7 @@ describe('DriverRepository', () => {
     it('should return an empty array if there are no Drivers', async () => {
       prismaMock.driver.findMany.mockResolvedValue([]);
 
-      const Drivers = await _DriverRepository.findAllDrivers();
+      const Drivers = await _DriverRepository.findAllDrivers(undefined);
 
       expect(Drivers).toEqual([]);
     });
@@ -42,9 +42,17 @@ describe('DriverRepository', () => {
     it('should return all Drivers', async () => {
       prismaMock.driver.findMany.mockResolvedValue(mockDrivers);
 
-      const foundDrivers = await _DriverRepository.findAllDrivers();
+      const foundDrivers = await _DriverRepository.findAllDrivers(undefined);
 
       expect(foundDrivers).toEqual(mockDrivers);
+    });
+
+    it('should return all Drivers filtered by name', async () => {
+      prismaMock.driver.findMany.mockResolvedValue([mockDrivers[1]]);
+
+      const foundDrivers = await _DriverRepository.findAllDrivers('Moreira');
+
+      expect(foundDrivers).toEqual([mockDrivers[1]]);
     });
   });
 

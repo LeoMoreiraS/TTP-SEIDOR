@@ -1,5 +1,5 @@
 import { type Prisma, type PrismaClient, type Automobile } from '@prisma/client';
-import { type IAutomobileRepository } from '../IAutomobileRepository';
+import { type IFilterAutomobilesDTO, type IAutomobileRepository } from '../IAutomobileRepository';
 
 export class AutomobileRepository implements IAutomobileRepository {
   constructor (readonly prisma: PrismaClient) {};
@@ -10,8 +10,12 @@ export class AutomobileRepository implements IAutomobileRepository {
     });
   }
 
-  async findAllAutomobiles (): Promise<Automobile[]> {
-    return await this.prisma.automobile.findMany();
+  async findAllAutomobiles ({ color, brand }: IFilterAutomobilesDTO): Promise<Automobile[]> {
+    const filterOptions = {};
+    if (color !== undefined) Object.assign(filterOptions, { ...filterOptions, color: { equals: color } });
+    if (brand !== undefined) Object.assign(filterOptions, { ...filterOptions, brand: { equals: brand } });
+
+    return await this.prisma.automobile.findMany({ where: filterOptions });
   }
 
   async findAutomobileById (id: number): Promise<Automobile | null> {

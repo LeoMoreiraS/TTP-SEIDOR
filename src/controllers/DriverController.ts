@@ -9,7 +9,9 @@ export class DriverController {
 
   async getDrivers (req: Request, res: Response): Promise<Response> {
     try {
-      const Drivers = await this.DriverRepository.findAllDrivers();
+      const body: { name?: string } = req.query;
+
+      const Drivers = await this.DriverRepository.findAllDrivers(body.name);
       return res.json(Drivers);
     } catch (error) {
       return errorHandler(error, res);
@@ -20,10 +22,10 @@ export class DriverController {
     const { id } = req.params;
 
     if (id === undefined) {
-      return errorHandler(new Error('Missing required parameter: id'), res);
+      return errorHandler('Missing required parameter: id', res);
     }
     if (idValidator(id)) {
-      return errorHandler(new Error('Invalid id'), res);
+      return errorHandler('Invalid id', res);
     }
 
     try {
@@ -42,7 +44,7 @@ export class DriverController {
     const DriverData: Prisma.DriverCreateInput = req.body;
 
     if (DriverData?.name === undefined) {
-      return errorHandler(new Error('Missing required fields in request body'), res);
+      return errorHandler('Missing required fields in request body', res);
     }
 
     try {
@@ -58,12 +60,12 @@ export class DriverController {
     try {
       const { id } = req.params;
       if (idValidator(id)) {
-        return errorHandler(new Error('Invalid id'), res);
+        return errorHandler('Invalid id', res);
       }
 
       const DriverData: Prisma.DriverUpdateInput = req.body;
       if (DriverData?.name === undefined) {
-        return errorHandler(new Error('Missing required fields in request body'), res);
+        return errorHandler('Missing required fields in request body', res);
       }
 
       const updatedDriver = await this.DriverRepository.updateDriver(Number(id), DriverData);
@@ -82,7 +84,7 @@ export class DriverController {
     try {
       const { id } = req.params;
       if (idValidator(id)) {
-        return errorHandler(new Error('Invalid id'), res);
+        return errorHandler('Invalid id', res);
       }
 
       const deletedDriver = await this.DriverRepository.deleteDriver(Number(id));
