@@ -12,6 +12,11 @@ Para inicializar o banco com o prisma utilize o comando:
 ```bash
 npx prisma migrate dev
 ```
+Para iniciar o projeto rode o comando:
+
+```bash
+npm run dev
+```
 
 ## Funcionalidades:
 ### Cadastro de automóvel:
